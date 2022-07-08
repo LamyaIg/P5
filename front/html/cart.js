@@ -165,6 +165,14 @@ function supprimerElement(id, color) {
 }
 */
 
+let valid = {
+  lastName: false,
+  firstName: false,
+  address: false,
+  city: false,
+  email: false,
+};
+
 function formulaire() {
   // gestion du nom
   const regexLastName = /(^.{1,}[a-zA-ZÀ-ÿ]+$)/;
@@ -178,6 +186,10 @@ function formulaire() {
         "Merci d'indiquer un nom de plus de 3 caractères";
       //alert("Vous devez entrer au minimum 3 lettres pour votre nom.");
       errorMsgLastName.style.display = "block";
+      valid.lastName = false;
+    } else {
+      valid.lastName = true;
+      errorMsgLastName.style.display = "none";
     }
   });
 
@@ -193,6 +205,10 @@ function formulaire() {
         "Merci d'indiquer un prenom de plus de 3 caractères";
       //alert("Vous devez entrer au minimum 3 lettres pour votre prenom.");
       errorMsgFirstName.style.display = "block";
+      valid.firstName = false;
+    } else {
+      valid.firstName = true;
+      errorMsgFirstName.style.display = "none";
     }
   });
 
@@ -208,6 +224,10 @@ function formulaire() {
         "Merci d'indiquer une adresse de plus de 3 caractères";
       //alert("Vous devez entrer au minimum 3 lettres pour votre adresse.");
       errorMsgAddress.style.display = "block";
+      valid.address = false;
+    } else {
+      valid.address = true;
+      errorMsgAddress.style.display = "none";
     }
   });
 
@@ -222,6 +242,10 @@ function formulaire() {
         "Merci d'indiquer une ville de plus de 3 caractères";
       //alert("Vous devez entrer au minimum 3 lettres pour votre ville.");
       errorMsgCity.style.display = "block";
+      valid.city = false;
+    } else {
+      valid.city = true;
+      errorMsgCity.style.display = "none";
     }
   });
 
@@ -236,6 +260,10 @@ function formulaire() {
         "Merci d'indiquer un mail de plus de 3 caractères";
       //alert("Vous devez entrer au minimum 3 lettres pour votre mail.");
       errorMsgEmail.style.display = "block";
+      valid.email = false;
+    } else {
+      valid.email = true;
+      errorMsgEmail.style.display = "none";
     }
   });
 }
@@ -250,46 +278,45 @@ if (!erreur) {
     listeIdCanape.push(choix._id);
   });
 
-  let message = {
-    contact: {
-      firstName: document.getElementById("firstName").value,
-      lastName: document.getElementById("lastName").value,
-      address: document.getElementById("address").value,
-      city: document.getElementById("city").value,
-      email: document.getElementById("email").value,
-    },
-    products: listeIdCanape,
-  };
-  console.log("Contenu de la variable message : " + JSON.stringify(message));
-  localStorage.removeItem("confirmationCommande");
-  fetch("http://localhost:3000/api/products/order", {
-    method: "POST",
-    headers: {
-      Accept: "application/json, text/plain, /",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(message),
+let message = {
+  contact: {
+    firstName: document.getElementById("firstName").value,
+    lastName: document.getElementById("lastName").value,
+    address: document.getElementById("address").value,
+    city: document.getElementById("city").value,
+    email: document.getElementById("email").value,
+  },
+  products: listeIdCanape,
+};
+console.log("Contenu de la variable message : " + JSON.stringify(message));
+localStorage.removeItem("confirmationCommande");
+fetch("http://localhost:3000/api/products/order", {
+  method: "POST",
+  headers: {
+    Accept: "application/json, text/plain, /",
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify(message),
+})
+  .then(function (res) {
+    if (res.ok) {
+      return res.json();
+    }
   })
-    .then(function (res) {
-      if (res.ok) {
-        return res.json();
-      }
-    })
-    .then(function (confirmationCommande) {
-      console.log(
-        "Confirmation de commande : " + JSON.stringify(confirmationCommande)
-      );
-      localStorage.setItem(
-        "confirmationCommande",
-        JSON.stringify(confirmationCommande)
-      );
-      window.location.href = "confirmation.html";
-    })
-    .catch(function (error) {
-      console.log("Erreur : " + error);
-    });
-}
-*/
+  .then(function (confirmationCommande) {
+    console.log(
+      "Confirmation de commande : " + JSON.stringify(confirmationCommande)
+    );
+    localStorage.setItem(
+      "confirmationCommande",
+      JSON.stringify(confirmationCommande)
+    );
+    window.location.href = "confirmation.html";
+  })
+  .catch(function (error) {
+    console.log("Erreur : " + error);
+  });*/
+
 async function main() {
   await allProducts();
   await total();
