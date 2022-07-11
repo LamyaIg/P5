@@ -151,20 +151,6 @@ function supprimerElement(id, color) {
   }
 }
 
-/*function boutonCommander() {
-  const itemCommander = document.getElementById("order");
-  for (let commander of itemCommander) {
-    boutonCommander.addEventListener("click", function (event) {
-      //Se déclenche lorsqu'on clique sur le bouton commander
-      //Récupérer chacune des valeurs du formulaire
-      //Vérifier pour chaque valeur qu'il y a une information, sinon afficher un message d'erreur
-      event.preventDefault();
-      let erreur = false;
-    });
-  }
-}
-*/
-
 let valid = {
   lastName: false,
   firstName: false,
@@ -268,54 +254,71 @@ function formulaire() {
   });
 }
 
-/*if(erreur==true) {
-  alert("Il y a une erreur dans vôtre formulaire, tous les champs doivent être rempli avec au minimum 3 carractères.");
-  
-}
-if (!erreur) {
-  let listeIdCanape = [];
-  panier.forEach((choix, index) => {
-    listeIdCanape.push(choix._id);
-  });
+function Input() {
+  const order = document.getElementById("order");
+  order.addEventListener("click", function (event) {
+    const firstName = document.getElementById("firstName").value;
+    const lastName = document.getElementById("lastName").value;
+    const address = document.getElementById("address").value;
+    const city = document.getElementById("city").value;
+    const email = document.getElementById("email").value;
 
-let message = {
-  contact: {
-    firstName: document.getElementById("firstName").value,
-    lastName: document.getElementById("lastName").value,
-    address: document.getElementById("address").value,
-    city: document.getElementById("city").value,
-    email: document.getElementById("email").value,
-  },
-  products: listeIdCanape,
-};
-console.log("Contenu de la variable message : " + JSON.stringify(message));
-localStorage.removeItem("confirmationCommande");
-fetch("http://localhost:3000/api/products/order", {
-  method: "POST",
-  headers: {
-    Accept: "application/json, text/plain, /",
-    "Content-Type": "application/json",
-  },
-  body: JSON.stringify(message),
-})
-  .then(function (res) {
-    if (res.ok) {
-      return res.json();
+    let contact = {
+      firstName: firstName,
+      lastName: lastName,
+      address: address,
+      city: city,
+      email: email,
+    };
+
+    if (firstName && lastName && address && city && email) {
+      event.preventDefault();
+      if (
+        valid.firstName &&
+        valid.lastName &&
+        valid.address &&
+        valid.city &&
+        valid.email
+      ) {
+        validation(contact);
+      }
     }
-  })
-  .then(function (confirmationCommande) {
-    console.log(
-      "Confirmation de commande : " + JSON.stringify(confirmationCommande)
-    );
-    localStorage.setItem(
-      "confirmationCommande",
-      JSON.stringify(confirmationCommande)
-    );
-    window.location.href = "confirmation.html";
-  })
-  .catch(function (error) {
-    console.log("Erreur : " + error);
-  });*/
+
+    function validation(contact) {
+      let panier = setStorage();
+      let listIdCanap = [];
+      if (panier.length <= 0) {
+        window.alert(
+          "Veuillez sélectionner un produit avant de poursuivre votre commande."
+        );
+      } else {
+        for (let i in panier) {
+          for (let j = 0; j < panier[i].quantity; j++) {
+            listIdCanap.push(panier[i].id);
+          }
+        }
+      }
+
+      const dataToSend = {
+        products: listIdCanap,
+        contact: contact,
+      };
+
+      fetch("http://localhost:3000/api/products/order", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(dataToSend),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          location.href = `./confirmation.html?orderId=${data.orderId}`;
+        });
+    }
+  });
+}
 
 async function main() {
   await allProducts();
@@ -323,5 +326,7 @@ async function main() {
   listenChangeQuantity();
   listenSupprimer();
   formulaire();
+  Input();
+  validation();
 }
 main();
