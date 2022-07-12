@@ -12,7 +12,7 @@ function getBasket() {
   if (panier == null) {
     return [];
   } else {
-    return JSON.parse(panier);
+    return JSON.stringify(panier);
   }
 }
 
@@ -48,7 +48,8 @@ function displayProduct(products, basketToShow) {
 
 async function allProducts() {
   const products = await getProducts();
-  for (let basketToShow of getBasket()) {
+  let panier = getBasket();
+  for (let basketToShow of panier) {
     const product = products.filter((p) => p._id === basketToShow.id);
     displayProduct(product[0], basketToShow);
   }
@@ -244,70 +245,71 @@ function formulaire() {
   });
 }
 
-function Input() {
-  const order = document.getElementById("order");
-  order.addEventListener("click", function (event) {
-    const firstName = document.getElementById("firstName").value;
-    const lastName = document.getElementById("lastName").value;
-    const address = document.getElementById("address").value;
-    const city = document.getElementById("city").value;
-    const email = document.getElementById("email").value;
-
-    let contact = {
-      firstName: firstName,
-      lastName: lastName,
-      address: address,
-      city: city,
-      email: email,
-    };
-
-    if (firstName && lastName && address && city && email) {
-      event.preventDefault();
-      if (
-        valid.firstName &&
-        valid.lastName &&
-        valid.address &&
-        valid.city &&
-        valid.email
-      ) {
-        validation(contact);
+function validation(contact) {
+  let panier = setStorage();
+  let listIdCanap = [];
+  if (panier.length <= 0) {
+    window.alert(
+      "Veuillez sélectionner un produit avant de poursuivre votre commande."
+    );
+  } else {
+    for (let i in panier) {
+      for (let j = 0; j < panier[i].quantity; j++) {
+        listIdCanap.push(panier[i].id);
       }
     }
+  }
 
-    function validation(contact) {
-      let panier = setStorage();
-      let listIdCanap = [];
-      if (panier.length <= 0) {
-        window.alert(
-          "Veuillez sélectionner un produit avant de poursuivre votre commande."
-        );
-      } else {
-        for (let i in panier) {
-          for (let j = 0; j < panier[i].quantity; j++) {
-            listIdCanap.push(panier[i].id);
-          }
-        }
-      }
+  function Input() {
+    const order = document.getElementById("order");
+    order.addEventListener("click", function (event) {
+      const firstName = document.getElementById("firstName").value;
+      const lastName = document.getElementById("lastName").value;
+      const address = document.getElementById("address").value;
+      const city = document.getElementById("city").value;
+      const email = document.getElementById("email").value;
 
-      const dataToSend = {
-        products: listIdCanap,
-        contact: contact,
+      let contact = {
+        firstName: firstName,
+        lastName: lastName,
+        address: address,
+        city: city,
+        email: email,
       };
 
-      fetch("http://localhost:3000/api/products/order", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(dataToSend),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          location.href = `./confirmation.html?orderId=${data.orderId}`;
-        });
-    }
-  });
+      if (firstName && lastName && address && city && email) {
+        event.preventDefault();
+        if (
+          valid.firstName &&
+          valid.lastName &&
+          valid.address &&
+          valid.city &&
+          valid.email
+        ) {
+          validation(contact);
+        }
+
+        const dataToSend = {
+          products: listIdCanap,
+          contact: contact,
+        };
+
+        /*const headers = new Headers();
+        fetch("http://localhost:3000/api/products/order", {
+          method: "POST",
+          headers: {
+            Accept: "application / json",
+            "Content-Type": "application / json",
+          },
+          body: JSON.stringify(dataToSend),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            location.href = `./confirmation.html?orderId=${data.orderId}`;
+          });*/
+      }
+    });
+  }
 }
 
 async function main() {
@@ -316,7 +318,7 @@ async function main() {
   listenChangeQuantity();
   listenSupprimer();
   formulaire();
-  validation();
+  validation(contact);
   Input();
 }
 main();
