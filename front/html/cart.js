@@ -12,7 +12,7 @@ function getBasket() {
   if (panier == null) {
     return [];
   } else {
-    return JSON.stringify(panier);
+    return JSON.parse(panier);
   }
 }
 
@@ -318,7 +318,7 @@ async function main() {
   listenChangeQuantity();
   listenSupprimer();
   formulaire();
-  validation(contact);
+  validation();
   Input();
 }
 main();
