@@ -8,11 +8,11 @@ function getProducts() {
 }
 
 function getBasket() {
-  let basket = localStorage.getItem("panier");
-  if (basket == null) {
+  let panier = localStorage.getItem("panier");
+  if (panier == null) {
     return [];
   } else {
-    return JSON.parse(basket);
+    return JSON.parse(panier);
   }
 }
 
@@ -71,16 +71,6 @@ const total = async () => {
   const totalPriceToBasket = document.getElementById("totalPrice");
   totalPriceToBasket.textContent = await getAllPrices();
 };
-
-function getAllPrices() {
-  let totalPrice = 0;
-  let panier = getBasket();
-  for (let i in panier) {
-    const getAllPrices = panier[i].price;
-    totalPrice += getAllPrices;
-  }
-  return totalPrice;
-}
 
 async function getAllPrices() {
   let totalPrice = 0;
@@ -326,7 +316,7 @@ async function main() {
   listenChangeQuantity();
   listenSupprimer();
   formulaire();
-  Input();
   validation();
+  Input();
 }
 main();

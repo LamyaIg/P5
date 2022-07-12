@@ -69,7 +69,7 @@ function getStorage() {
   //Si le panier n'est pas vide
   else {
     //On transforme le panier en JSON pour pouvoir le manipuler
-    return JSON.parse(panier);
+    return JSON.parse(basket);
   }
 }
 

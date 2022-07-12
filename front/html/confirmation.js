@@ -6,8 +6,6 @@ let orderId = order.get("orderId");
 function OrderId() {
   let order = document.getElementById("orderId");
   order.textContent = orderId;
-  //Une fois la confirmation de commande afficher on vide le panier en le supprimant.
-  localStorage.removeItem("panier");
 }
 
 OrderId();
