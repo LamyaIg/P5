@@ -246,7 +246,7 @@ function formulaire() {
 }
 
 function validation(contact) {
-  let panier = setStorage();
+  let panier = getBasket();
   let listIdCanap = [];
   if (panier.length <= 0) {
     window.alert(
@@ -261,6 +261,24 @@ function validation(contact) {
   }
 
   function inputElement() {
+    const dataToSend = {
+      products: listIdCanap,
+      contact: contact,
+    };
+
+    fetch("http://localhost:3000/api/products/order", {
+      method: "POST",
+      headers: {
+        Accept: "application / json",
+        "Content-Type": "application / json",
+      },
+      body: JSON.stringify(dataToSend),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        location.href = `./confirmation.html?orderId=${data.orderId}`;
+      });
+
     const order = document.getElementById("order");
     order.addEventListener("click", function (event) {
       const firstName = document.getElementById("firstName").value;
@@ -288,25 +306,6 @@ function validation(contact) {
         ) {
           validation(contact);
         }
-
-        const dataToSend = {
-          products: listIdCanap,
-          contact: contact,
-        };
-
-        /*
-        fetch("http://localhost:3000/api/products/order", {
-          method: "POST",
-          headers: {
-            Accept: "application / json",
-            "Content-Type": "application / json",
-          },
-          body: JSON.stringify(dataToSend),
-        })
-          .then((res) => res.json())
-          .then((data) => {
-            location.href = `./confirmation.html?orderId=${data.orderId}`;
-          });*/
       }
     });
   }
@@ -317,7 +316,6 @@ async function main() {
   listenChangeQuantity();
   listenSupprimer();
   formulaire();
-  validation(contact);
   inputElement();
 }
 main();
