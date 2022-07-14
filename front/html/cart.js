@@ -260,7 +260,7 @@ function validation(contact) {
     }
   }
 
-  function Input() {
+  function inputElement() {
     const order = document.getElementById("order");
     order.addEventListener("click", function (event) {
       const firstName = document.getElementById("firstName").value;
@@ -294,7 +294,7 @@ function validation(contact) {
           contact: contact,
         };
 
-        /*const headers = new Headers();
+        /*
         fetch("http://localhost:3000/api/products/order", {
           method: "POST",
           headers: {
@@ -310,15 +310,15 @@ function validation(contact) {
       }
     });
   }
-}
 
-async function main() {
-  await allProducts();
-  await total();
-  listenChangeQuantity();
-  listenSupprimer();
-  formulaire();
-  validation();
-  Input();
+  async function main() {
+    await allProducts();
+    await total();
+    listenChangeQuantity();
+    listenSupprimer();
+    formulaire();
+    validation();
+    inputElement();
+  }
+  main();
 }
-main();
