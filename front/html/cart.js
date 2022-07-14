@@ -310,15 +310,14 @@ function validation(contact) {
       }
     });
   }
-
-  async function main() {
-    await allProducts();
-    await total();
-    listenChangeQuantity();
-    listenSupprimer();
-    formulaire();
-    validation();
-    inputElement();
-  }
-  main();
 }
+async function main() {
+  await allProducts();
+  await total();
+  listenChangeQuantity();
+  listenSupprimer();
+  formulaire();
+  validation(contact);
+  inputElement();
+}
+main();
