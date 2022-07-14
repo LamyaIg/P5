@@ -259,57 +259,55 @@ function validation(contact) {
       }
     }
   }
+}
 
-  function inputElement() {
-    const dataToSend = {
-      products: listIdCanap,
-      contact: contact,
+function inputElement() {
+  const dataToSend = {};
+
+  fetch("http://localhost:3000/api/products/order", {
+    method: "POST",
+    headers: {
+      Accept: "application / json",
+      "Content-Type": "application / json",
+    },
+    body: JSON.stringify(dataToSend),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      location.href = `./confirmation.html?orderId=${data.orderId}`;
+    });
+
+  const order = document.getElementById("order");
+  order.addEventListener("click", function (event) {
+    const firstName = document.getElementById("firstName").value;
+    const lastName = document.getElementById("lastName").value;
+    const address = document.getElementById("address").value;
+    const city = document.getElementById("city").value;
+    const email = document.getElementById("email").value;
+
+    let contact = {
+      firstName: firstName,
+      lastName: lastName,
+      address: address,
+      city: city,
+      email: email,
     };
 
-    fetch("http://localhost:3000/api/products/order", {
-      method: "POST",
-      headers: {
-        Accept: "application / json",
-        "Content-Type": "application / json",
-      },
-      body: JSON.stringify(dataToSend),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        location.href = `./confirmation.html?orderId=${data.orderId}`;
-      });
-
-    const order = document.getElementById("order");
-    order.addEventListener("click", function (event) {
-      const firstName = document.getElementById("firstName").value;
-      const lastName = document.getElementById("lastName").value;
-      const address = document.getElementById("address").value;
-      const city = document.getElementById("city").value;
-      const email = document.getElementById("email").value;
-
-      let contact = {
-        firstName: firstName,
-        lastName: lastName,
-        address: address,
-        city: city,
-        email: email,
-      };
-
-      if (firstName && lastName && address && city && email) {
-        event.preventDefault();
-        if (
-          valid.firstName &&
-          valid.lastName &&
-          valid.address &&
-          valid.city &&
-          valid.email
-        ) {
-          validation(contact);
-        }
+    if (firstName && lastName && address && city && email) {
+      event.preventDefault();
+      if (
+        valid.firstName &&
+        valid.lastName &&
+        valid.address &&
+        valid.city &&
+        valid.email
+      ) {
+        validation(contact);
       }
-    });
-  }
+    }
+  });
 }
+
 async function main() {
   await allProducts();
   await total();
