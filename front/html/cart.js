@@ -259,10 +259,10 @@ function validation(contact) {
       }
     }
   }
-}
-
-function inputElement() {
-  const dataToSend = {};
+  const dataToSend = {
+    products: listIdCanap,
+    contact: contact,
+  };
 
   fetch("http://localhost:3000/api/products/order", {
     method: "POST",
@@ -276,7 +276,9 @@ function inputElement() {
     .then((data) => {
       location.href = `./confirmation.html?orderId=${data.orderId}`;
     });
+}
 
+function inputElement() {
   const order = document.getElementById("order");
   order.addEventListener("click", function (event) {
     const firstName = document.getElementById("firstName").value;
