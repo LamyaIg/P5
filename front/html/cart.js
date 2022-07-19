@@ -274,7 +274,7 @@ function validation(contact) {
   })
     .then((res) => res.json())
     .then((data) => {
-      location.href = `./confirmation.html?orderId=${data.orderId}`;
+      document.location.href = `./confirmation.html?orderId=${data.orderId}`;
     });
 }
 
