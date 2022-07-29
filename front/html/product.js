@@ -44,7 +44,7 @@ function eventListener() {
       color: couleurChoisie,
       quantity: quantite,
     };
-    if (couleurChoisie) {
+    if (couleurChoisie && quantite > 0) {
       if (window.confirm("souhaitez-vous ajouter ce produit au panier ?")) {
         addToBasket(choix);
       }
@@ -52,46 +52,45 @@ function eventListener() {
       return window.alert("veuillez choisir une couleur!");
     }
   });
-}
 
-function setStorage(panier) {
-  localStorage.setItem("panier", JSON.stringify(panier));
-}
-//On ajouter un choix à la liste d'éléments du panier
-//On récupère le panier existant
-function getStorage() {
-  let panier = localStorage.getItem("panier");
-  //Si le panier est vide
-  if (panier == null) {
-    //On crée un panier qui est une liste d'éléments
-    return [];
+  function setStorage(panier) {
+    localStorage.setItem("panier", JSON.stringify(panier));
   }
-  //Si le panier n'est pas vide
-  else {
-    //On transforme le panier en JSON pour pouvoir le manipuler
-    return JSON.parse(panier);
-  }
-}
-
-function addToBasket(choix) {
-  let panier = getStorage();
-  for (let i in panier) {
-    const productInBasket = panier[i];
-    if (
-      productInBasket.id === choix.id &&
-      productInBasket.color === choix.color
-    ) {
-      productInBasket.quantity = choix.quantity + productInBasket.quantity;
-      setStorage(panier);
-      return;
+  //On ajouter un choix à la liste d'éléments du panier
+  //On récupère le panier existant
+  function getStorage() {
+    let panier = localStorage.getItem("panier");
+    //Si le panier est vide
+    if (panier == null) {
+      //On crée un panier qui est une liste d'éléments
+      return [];
+    }
+    //Si le panier n'est pas vide
+    else {
+      //On transforme le panier en JSON pour pouvoir le manipuler
+      return JSON.parse(panier);
     }
   }
 
-  panier.push(choix);
-  setStorage(panier);
-  return;
-}
+  function addToBasket(choix) {
+    let panier = getStorage();
+    for (let i in panier) {
+      const productInBasket = panier[i];
+      if (
+        productInBasket.id === choix.id &&
+        productInBasket.color === choix.color
+      ) {
+        productInBasket.quantity = choix.quantity + productInBasket.quantity;
+        setStorage(panier);
+        return;
+      }
+    }
 
+    panier.push(choix);
+    setStorage(panier);
+    return;
+  }
+}
 async function main() {
   const product = await getProduct();
   displayProduct(product);

@@ -128,6 +128,7 @@ function listenSupprimer() {
       const dataColor = findParent.dataset.color;
       console.log(dataId, dataColor);
       supprimerElement(dataId, dataColor);
+      location.reload();
     });
   }
 }
