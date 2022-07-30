@@ -108,11 +108,13 @@ function listenChangeQuantity() {
     });
   }
 }
+
 function changeQuantity(id, color, quantity) {
   const panier = getBasket();
   for (let i in panier) {
     if (panier[i].id === id && panier[i].color === color) {
       panier[i].quantity = quantity;
+
       setStorage(panier);
       location.reload();
     }

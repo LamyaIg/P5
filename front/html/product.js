@@ -44,12 +44,14 @@ function eventListener() {
       color: couleurChoisie,
       quantity: quantite,
     };
-    if (couleurChoisie && quantite > 0) {
+    if (couleurChoisie && quantite > 0 && quantite < 100) {
       if (window.confirm("souhaitez-vous ajouter ce produit au panier ?")) {
         addToBasket(choix);
       }
     } else {
-      return window.alert("veuillez choisir une couleur!");
+      return window.alert(
+        "Veuillez sélectionner un nombre correcte d'article !"
+      );
     }
   });
 
